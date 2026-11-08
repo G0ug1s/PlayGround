@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#101a32">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✦</text></svg>">
+<title>Aventura do Reino — plataforma 2D</title>
+<style>
+:root{color-scheme:dark;--ink:#17243d;--cream:#fff4d8;--gold:#ffca58;--mint:#84efbe}*{box-sizing:border-box}html,body{height:100%;margin:0;overflow:hidden;background:#101a32;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--cream);touch-action:none;user-select:none;-webkit-user-select:none}body{display:grid;place-items:center;background:radial-gradient(ellipse at 50% 20%,#26395c 0,#121d37 55%,#0b1326 100%)}.game-shell{position:relative;width:min(100vw, calc(100dvh * 16 / 9));height:min(100dvh, calc(100vw * 9 / 16));aspect-ratio:16/9;overflow:hidden;border:1px solid #ffffff24;border-radius:18px;background:#76d8ff;box-shadow:0 24px 90px #0008,inset 0 0 0 1px #fff2}.game-canvas{display:block;width:100%;height:100%;image-rendering:pixelated}.topbar{position:absolute;z-index:2;inset:0 0 auto;display:flex;align-items:flex-start;justify-content:space-between;padding:15px 20px;pointer-events:none}.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.03em;text-shadow:0 2px 6px #17345166}.brand-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#fff2d6;color:#e97042;font-size:19px;box-shadow:0 3px 0 #d9a563}.brand-name{font-size:13px;line-height:1.05}.brand-name small{display:block;margin-top:3px;color:#d9f6ff;font-size:9px;letter-spacing:.17em}.hud{display:flex;gap:8px}.pill{min-width:76px;padding:8px 11px;border:1px solid #ffffff30;border-radius:12px;background:#102441a8;color:#fff4d8;text-align:center;backdrop-filter:blur(8px);font-size:11px;font-weight:800;letter-spacing:.05em}.pill span{color:#ffdc76}.sound-btn{pointer-events:auto;cursor:pointer;width:38px;height:38px;border:1px solid #ffffff38;border-radius:12px;background:#102441a8;color:white;font-size:16px}.help{position:absolute;z-index:2;left:20px;bottom:15px;color:#fff9;font-size:10px;font-weight:700;letter-spacing:.08em;text-shadow:0 2px 4px #123}.touch-controls{display:none;position:absolute;z-index:3;inset:auto 0 12px;justify-content:space-between;padding:0 16px;pointer-events:none}.pad-group{display:flex;align-items:end;gap:10px}.touch-btn{pointer-events:auto;display:grid;place-items:center;width:58px;height:58px;border:1px solid #ffffff66;border-radius:20px;background:#1529479c;color:white;font-size:24px;font-weight:900;box-shadow:0 5px 0 #0b182c88;backdrop-filter:blur(5px);touch-action:none}.touch-btn.jump{width:72px;height:72px;border-radius:24px;background:#ef795d;color:#fff;font-size:13px;letter-spacing:.04em}.touch-btn:active,.touch-btn.down{transform:translateY(3px);box-shadow:0 2px 0 #0b182c88;filter:brightness(1.15)}.mobile-tip{display:none;position:absolute;z-index:2;left:50%;bottom:96px;transform:translateX(-50%);white-space:nowrap;color:#fff9;font-size:10px;text-shadow:0 2px 4px #123}.screen-reader{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:760px),(pointer:coarse){.game-shell{border-radius:0;border:0;width:100vw;height:100dvh;aspect-ratio:auto}.game-canvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:max(100vw,calc(100dvh * 16 / 9));height:max(100dvh,calc(100vw * 9 / 16));max-width:none;aspect-ratio:16/9}.topbar{padding:10px 11px}.brand-name{font-size:11px}.brand-icon{width:30px;height:30px}.hud{gap:5px}.pill{min-width:56px;padding:7px 7px;font-size:9px;white-space:nowrap}.sound-btn{width:34px;height:34px}.touch-controls{display:flex}.mobile-tip{display:block}.help{display:none}}@media(max-width:420px){.brand{gap:7px}.brand-name{font-size:9px;white-space:nowrap}.brand-name small{display:none}.hud{gap:4px}.pill{min-width:0;padding:7px 6px;font-size:8px}.sound-btn{width:32px;height:34px}}@media(max-height:430px) and (pointer:coarse){.topbar{padding:6px 10px}.touch-controls{bottom:7px}.touch-btn{width:48px;height:48px;border-radius:16px}.touch-btn.jump{width:61px;height:61px}.mobile-tip{bottom:74px}}
+</style>
+</head>
+<body>
+<main class="game-shell" aria-label="Jogo Aventura do Reino">
+<canvas class="game-canvas" id="game" width="960" height="540" aria-label="Aventura do Reino, jogo de plataforma"></canvas>
+<div class="topbar"><div class="brand"><div class="brand-icon">✦</div><div class="brand-name">AVENTURA DO REINO<small>PLATAFORMA • FASE 1</small></div></div><div class="hud"><div class="pill">MOEDAS <span id="coins">00</span></div><div class="pill">VIDAS <span id="lives">♥ ♥ ♥</span></div><button class="sound-btn" id="sound" aria-label="Ativar ou desativar som">♫</button></div></div>
+<div class="help">← → MOVER &nbsp; • &nbsp; ESPAÇO PULAR &nbsp; • &nbsp; P P AUSAR</div><div class="mobile-tip">TOQUE NOS BOTÕES PARA JOGAR</div>
+<div class="touch-controls"><div class="pad-group"><button class="touch-btn" data-key="left" aria-label="Mover para esquerda">◀</button><button class="touch-btn" data-key="right" aria-label="Mover para direita">▶</button></div><div class="pad-group"><button class="touch-btn jump" data-key="jump" aria-label="Pular">PULAR</button></div></div>
+<div class="screen-reader" id="announcement" aria-live="polite"></div>
+</main>
+<script>
+(()=>{'use strict';
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'),W=960,H=540;
+ctx.imageSmoothingEnabled=false;
+const ui={coins:document.getElementById('coins'),lives:document.getElementById('lives'),sound:document.getElementById('sound'),announce:document.getElementById('announcement')};
+const keys={left:false,right:false,jump:false};
+const FLOOR=438, WORLD=3900, gravity=.58;
+let mode='title',camera=0,frame=0,score=0,lives=3,coins=0,muted=false,audio=null,toast='',toastTime=0;
+let player, platforms, pickups, enemies, particles, checkpoints, flag;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function resetLevel(){
+ player={x:76,y:FLOOR-46,w:30,h:44,vx:0,vy:0,onGround:false,face:1,invuln:0,anim:0};camera=0;
+ platforms=[{x:0,y:FLOOR,w:610,h:140},{x:710,y:FLOOR,w:530,h:140},{x:1350,y:FLOOR,w:550,h:140},{x:2010,y:FLOOR,w:610,h:140},{x:2730,y:FLOOR,w:1170,h:140},
+ {x:250,y:346,w:112,h:18},{x:432,y:286,w:110,h:18},{x:794,y:356,w:125,h:18},{x:1000,y:300,w:110,h:18},{x:1515,y:350,w:120,h:18},{x:1710,y:290,w:115,h:18},{x:2150,y:350,w:125,h:18},{x:2370,y:292,w:110,h:18},{x:2860,y:350,w:120,h:18},{x:3060,y:300,w:130,h:18}];
+ pickups=[];const rows=[[180,210,240,270],[459,492,525],[820,855,890],[1040,1075,1110],[1455,1490,1525],[1740,1775,1810],[2185,2220,2255],[2400,2435,2470],[2920,2955,2990],[3100,3140,3180],[3380,3415,3450,3485]];
+ rows.forEach((xs,r)=>xs.forEach((x,i)=>pickups.push({x,y:[FLOOR-52,260,307,258][(r+i)%4],taken:false,bob:Math.random()*6.28})));
+ enemies=[{x:375,y:FLOOR-29,min:330,max:580,v:.75,alive:true},{x:895,y:FLOOR-29,min:750,max:1180,v:.9,alive:true},{x:1590,y:FLOOR-29,min:1400,max:1850,v:.85,alive:true},{x:2270,y:FLOOR-29,min:2070,max:2550,v:1,alive:true},{x:2960,y:FLOOR-29,min:2770,max:3240,v:.95,alive:true}];
+ particles=[];checkpoints=[{x:1350,active:false},{x:2730,active:false}];flag={x:3700,y:FLOOR-160};
+}
+resetLevel();
+function sound(freq=520,duration=.08,type='sine'){if(muted)return;try{audio??=new(window.AudioContext||window.webkitAudioContext)();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.055,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+duration)}catch{}}
+function announce(text){ui.announce.textContent=text}
+function startGame(){if(mode==='title'||mode==='over'||mode==='won'){resetLevel();score=0;coins=0;lives=3;updateHud()}mode='playing';announce('Jogo iniciado. Boa aventura!');sound(660,.1)}
+function updateHud(){ui.coins.textContent=String(coins).padStart(2,'0');ui.lives.textContent='♥ '.repeat(Math.max(0,lives)).trim()||'—'}
+function showToast(text){toast=text;toastTime=100;announce(text)}
+function respawn(){lives--;updateHud();if(lives<=0){mode='over';announce('Fim de jogo. Toque para tentar novamente.');return}const cp=checkpoints.filter(c=>c.active).at(-1);player.x=cp?cp.x+16:76;player.y=FLOOR-48;player.vx=player.vy=0;player.invuln=100;camera=clamp(player.x-330,0,WORLD-W);showToast('Quase! Vamos de novo!');sound(190,.22,'square')}
+function startJump(){if(mode==='title'||mode==='over'||mode==='won'){startGame();return}if(mode==='paused'){mode='playing';return}if(player.onGround){player.vy=-12.3;player.onGround=false;sound(430,.08)}}
+function rectHit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
+function update(){frame++;if(mode!=='playing')return;
+ let dir=(keys.right?1:0)-(keys.left?1:0);player.vx+=dir*.62;if(!dir)player.vx*=.78;player.vx=clamp(player.vx,-4.2,4.2);if(dir)player.face=dir;player.x=clamp(player.x+player.vx,0,WORLD-player.w);player.vy=Math.min(player.vy+gravity,13);let oldY=player.y;player.y+=player.vy;player.onGround=false;
+ for(const p of platforms){if(player.x+player.w>p.x&&player.x<p.x+p.w&&oldY+player.h<=p.y+4&&player.y+player.h>=p.y&&player.vy>=0){player.y=p.y-player.h;player.vy=0;player.onGround=true}}
+ if(player.y>H+180){respawn();return}
+ for(const cp of checkpoints){if(!cp.active&&player.x+player.w>cp.x&&player.x<cp.x+35){cp.active=true;showToast('Ponto de retorno ativado!');sound(780,.15)}}
+ for(const e of enemies){if(!e.alive)continue;e.x+=e.v;if(e.x<e.min||e.x>e.max)e.v*=-1;const box={x:e.x,y:e.y,w:30,h:28};if(rectHit(player,box)){if(player.vy>1&&oldY+player.h<e.y+14){e.alive=false;player.vy=-8;score+=100;showToast('+100');sound(250,.08,'square');for(let i=0;i<8;i++)particles.push({x:e.x+15,y:e.y+12,vx:(Math.random()-.5)*4,vy:-Math.random()*4-1,life:30,color:'#ffca58'})}else if(player.invuln<=0){respawn();return}}}
+ for(const c of pickups){if(!c.taken&&Math.abs(player.x+player.w/2-c.x)<25&&Math.abs(player.y+player.h/2-c.y)<26){c.taken=true;coins++;score+=10;updateHud();sound(880,.06)}}
+ if(player.invuln>0)player.invuln--;player.anim+=Math.abs(player.vx)*.11;
+ for(const p of particles){p.x+=p.vx;p.y+=p.vy;p.vy+=.18;p.life--}particles=particles.filter(p=>p.life>0);
+ camera+=(clamp(player.x-350,0,WORLD-W)-camera)*.1;if(player.x>flag.x-22){mode='won';announce('Vitória! Você encontrou a bandeira do reino.');sound(720,.28);setTimeout(()=>sound(950,.3),220)}if(toastTime>0)toastTime--;
+}
+function rounded(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+function cloud(x,y,s=1){ctx.fillStyle='#fff9e9';ctx.beginPath();ctx.ellipse(x,y,31*s,16*s,0,0,Math.PI*2);ctx.ellipse(x-19*s,y+5*s,19*s,11*s,0,0,Math.PI*2);ctx.ellipse(x+20*s,y+6*s,21*s,10*s,0,0,Math.PI*2);ctx.fill()}
+function drawBackground(){
+ const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#69c9f1');sky.addColorStop(.68,'#b3eddf');sky.addColorStop(1,'#e7e6be');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ ctx.fillStyle='#ffe9a1';ctx.beginPath();ctx.arc(780-camera*.04,128,45,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff4c633';ctx.beginPath();ctx.arc(780-camera*.04,128,63,0,Math.PI*2);ctx.fill();
+ for(let i=0;i<8;i++){const x=((i*190-camera*.14)%(W+260)+W+260)%(W+260)-80;cloud(x,95+(i%3)*48,.7+(i%2)*.22)}
+ for(let layer=0;layer<2;layer++){const off=camera*(layer?.27:.16),base=360+layer*38;ctx.fillStyle=layer?'#9bd8b2':'#82cda9';ctx.beginPath();ctx.moveTo(0,H);for(let x=-160;x<W+200;x+=1){const wx=x+off;const peak=Math.sin(wx*.004+layer)*52+Math.sin(wx*.009)*18;ctx.lineTo(x,base-peak)}ctx.lineTo(W,H);ctx.closePath();ctx.fill()}
+ for(let i=0;i<30;i++){const x=((i*160-camera*.42)%(W+180)+W+180)%(W+180)-70,y=352+(i%3)*14;ctx.fillStyle=i%2?'#4da986':'#57b492';ctx.fillRect(x-5,y,10,40);ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.fill()}
+}
+function drawWorld(){
+ drawBackground();ctx.save();ctx.translate(-camera,0);
+ for(const p of platforms){ctx.fillStyle='#b9784a';ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle='#62bf69';ctx.fillRect(p.x,p.y,p.w,12);ctx.fillStyle='#8c5b40';for(let x=p.x+12;x<p.x+p.w-5;x+=34){ctx.fillRect(x,p.y+27,17,5);ctx.fillRect(x+14,p.y+66,15,5)}ctx.fillStyle='#a5e47b';ctx.fillRect(p.x,p.y,p.w,4)}
+ for(let x=45;x<WORLD;x+=103){const ground=platforms.find(p=>x>=p.x&&x<p.x+p.w);if(!ground)continue;const y=ground.y;ctx.fillStyle='#f8e98f';ctx.fillRect(x,y-14,4,10);ctx.fillStyle=x%2?'#f47770':'#fff0c1';ctx.fillRect(x-4,y-18,5,5);ctx.fillRect(x+3,y-19,5,5);ctx.fillStyle='#3c986c';ctx.fillRect(x+4,y-5,8,3)}
+ for(const p of platforms.filter(p=>p.y<FLOOR)){rounded(p.x,p.y,p.w,p.h,5,'#c68b4f');ctx.fillStyle='#ffda78';ctx.fillRect(p.x+2,p.y+2,p.w-4,5);ctx.fillStyle='#905d42';for(let x=p.x+14;x<p.x+p.w-3;x+=27)ctx.fillRect(x,p.y+11,12,3)}
+ for(const c of pickups){if(c.taken)continue;const y=c.y+Math.sin(frame*.08+c.bob)*4;ctx.fillStyle='#ffcf53';ctx.beginPath();ctx.ellipse(c.x,y,8,11,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff1a7';ctx.fillRect(c.x-2,y-6,3,7);ctx.fillStyle='#e99c34';ctx.fillRect(c.x+3,y-4,2,7)}
+ for(const cp of checkpoints){ctx.fillStyle='#725149';ctx.fillRect(cp.x,FLOOR-78,5,78);ctx.fillStyle=cp.active?'#ffda67':'#e69b67';ctx.beginPath();ctx.moveTo(cp.x+5,FLOOR-76);ctx.lineTo(cp.x+38,FLOOR-65);ctx.lineTo(cp.x+5,FLOOR-52);ctx.fill();if(cp.active){ctx.fillStyle='#fff';ctx.fillRect(cp.x+13,FLOOR-67,7,3)}}
+ ctx.fillStyle='#6b5144';ctx.fillRect(flag.x,FLOOR-166,7,166);ctx.fillStyle='#f6d565';ctx.fillRect(flag.x-5,FLOOR-170,17,7);ctx.fillStyle='#ee775e';ctx.beginPath();ctx.moveTo(flag.x+7,FLOOR-160);ctx.lineTo(flag.x+57,FLOOR-146);ctx.lineTo(flag.x+7,FLOOR-128);ctx.fill();ctx.fillStyle='#fff2d6';ctx.font='bold 14px system-ui';ctx.fillText('FIM',flag.x+15,FLOOR-143);
+ for(const e of enemies){if(!e.alive)continue;rounded(e.x,e.y+5,30,23,11,'#8a5968');rounded(e.x+4,e.y+2,22,18,8,'#d27a78');ctx.fillStyle='#fff5dd';ctx.fillRect(e.x+7,e.y+9,5,7);ctx.fillRect(e.x+19,e.y+9,5,7);ctx.fillStyle='#27344c';ctx.fillRect(e.x+9,e.y+12,3,4);ctx.fillRect(e.x+21,e.y+12,3,4);ctx.fillStyle='#664457';ctx.fillRect(e.x+5,e.y+26,7,4);ctx.fillRect(e.x+20,e.y+26,7,4)}
+ if(!(player.invuln>0&&Math.floor(frame/5)%2))drawPlayer();
+ for(const p of particles){ctx.globalAlpha=p.life/30;ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,5,5)}ctx.globalAlpha=1;
+ ctx.restore();
+}
+function drawPlayer(){
+ const x=Math.round(player.x),y=Math.round(player.y),run=Math.sin(player.anim)*3,flip=player.face<0;ctx.save();if(flip){ctx.translate(x+player.w,0);ctx.scale(-1,1)}else ctx.translate(x,0);
+ const px=flip?0:0; // original character: adventurous explorer, not a licensed hero
+ const step=player.onGround?run:0;
+ // boots and legs
+ ctx.fillStyle='#594b67';ctx.fillRect(4+step,y+36,10,8);ctx.fillRect(18-step,y+36,10,8);ctx.fillStyle='#e87554';ctx.fillRect(3+step,y+40,12,4);ctx.fillRect(17-step,y+40,12,4);
+ // body and scarf
+ rounded(5,y+20,21,19,5,'#38a987');ctx.fillStyle='#f6d565';ctx.fillRect(7,y+24,18,4);ctx.fillStyle='#e97459';ctx.fillRect(22,y+21,7,9);ctx.fillRect(24,y+28,7,7);
+ // face, hair and cap
+ rounded(6,y+5,22,19,6,'#f3bf8b');ctx.fillStyle='#5b4354';ctx.fillRect(7,y+4,20,7);ctx.fillRect(5,y+9,5,8);ctx.fillStyle='#f28a63';ctx.fillRect(5,y+2,24,6);ctx.fillRect(22,y+7,10,4);ctx.fillStyle='#fff';ctx.fillRect(20,y+11,5,6);ctx.fillStyle='#24344c';ctx.fillRect(23,y+13,3,4);ctx.fillStyle='#a95d52';ctx.fillRect(15,y+20,11,2);
+ ctx.restore();
+}
+function panel(title,subtitle,button,small){ctx.fillStyle='#11223d70';ctx.fillRect(0,0,W,H);rounded(250,110,460,330,24,'#fff2d8');rounded(257,117,446,316,19,'#fffaf0');ctx.fillStyle='#24405d';ctx.textAlign='center';ctx.font='900 13px system-ui';ctx.letterSpacing='2px';ctx.fillText('UMA AVENTURA DE PLATAFORMA',480,160);ctx.letterSpacing='0px';ctx.font='900 34px system-ui';ctx.fillStyle='#e96f53';ctx.fillText(title,480,214);ctx.font='600 15px system-ui';ctx.fillStyle='#4b5c6e';ctx.fillText(subtitle,480,248);rounded(345,278,270,53,16,'#f4bd4e');ctx.fillStyle='#4b382d';ctx.font='900 16px system-ui';ctx.fillText(button,480,311);ctx.font='600 12px system-ui';ctx.fillStyle='#697988';ctx.fillText(small,480,359);ctx.font='700 11px system-ui';ctx.fillStyle='#657868';ctx.fillText('COLETE MOEDAS  •  PULE SOBRE OS INIMIGOS  •  CHEGUE À BANDEIRA',480,396);ctx.textAlign='left'}
+function drawOverlay(){
+ const visibleWidth=W*Math.min(1,innerWidth/canvas.getBoundingClientRect().width);const scale=Math.min(1,visibleWidth/460*.94);ctx.save();ctx.translate(W/2,H/2);ctx.scale(scale,scale);ctx.translate(-W/2,-H/2);
+ if(mode==='title')panel('Aventura do Reino','Uma jornada colorida espera por você.','TOQUE PARA JOGAR','Setas para mover • Espaço para pular');
+ if(mode==='paused'){ctx.fillStyle='#10213a66';ctx.fillRect(0,0,W,H);rounded(330,195,300,150,22,'#fff6e3');ctx.fillStyle='#32465e';ctx.textAlign='center';ctx.font='900 30px system-ui';ctx.fillText('PAUSADO',480,248);ctx.font='600 14px system-ui';ctx.fillText('Toque ou pressione P para continuar',480,286);ctx.textAlign='left'}
+ if(mode==='over')panel('Fim de jogo','Cada tentativa deixa você mais perto!','TENTAR DE NOVO','Toque na tela ou pressione Espaço');
+ if(mode==='won')panel('Você conseguiu!','A bandeira do reino está ao seu alcance!','JOGAR DE NOVO','Moedas coletadas: '+coins);
+ if(mode==='playing'&&toastTime>0){ctx.globalAlpha=Math.min(1,toastTime/15);rounded(380,74,200,40,14,'#18314ebd');ctx.fillStyle='#fff5d8';ctx.textAlign='center';ctx.font='800 14px system-ui';ctx.fillText(toast,480,100);ctx.textAlign='left';ctx.globalAlpha=1}
+ ctx.restore();
+}
+function render(){ctx.clearRect(0,0,W,H);drawWorld();drawOverlay();}
+function loop(){update();render();requestAnimationFrame(loop)}
+function keyDown(e){const k=e.key.toLowerCase();if(['arrowleft','arrowright',' ','arrowup'].includes(k))e.preventDefault();if(k==='arrowleft'||k==='a')keys.left=true;if(k==='arrowright'||k==='d')keys.right=true;if(k===' '||k==='arrowup'||k==='w'){if(!keys.jump){keys.jump=true;startJump()}}if(k==='enter'&&(mode==='title'||mode==='over'||mode==='won'))startGame();if(k==='p'||k==='escape'){mode=mode==='paused'?'playing':mode==='playing'?'paused':mode}}
+function keyUp(e){const k=e.key.toLowerCase();if(k==='arrowleft'||k==='a')keys.left=false;if(k==='arrowright'||k==='d')keys.right=false;if(k===' '||k==='arrowup'||k==='w')keys.jump=false}
+window.addEventListener('keydown',keyDown);window.addEventListener('keyup',keyUp);window.addEventListener('blur',()=>{keys.left=keys.right=keys.jump=false});
+canvas.addEventListener('pointerdown',()=>{if(mode==='title'||mode==='over'||mode==='won')startGame();else if(mode==='paused')mode='playing'});
+document.querySelectorAll('.touch-btn').forEach(button=>{const key=button.dataset.key;const down=e=>{e.preventDefault();button.classList.add('down');if(key==='left'||key==='right')keys[key]=true;else if(!keys.jump){keys.jump=true;startJump()}};const up=e=>{e.preventDefault();button.classList.remove('down');if(key==='left'||key==='right')keys[key]=false;else keys.jump=false};button.addEventListener('pointerdown',down);button.addEventListener('pointerup',up);button.addEventListener('pointercancel',up);button.addEventListener('lostpointercapture',up)});
+ui.sound.addEventListener('click',()=>{muted=!muted;ui.sound.textContent=muted?'×':'♫';ui.sound.setAttribute('aria-label',muted?'Ativar som':'Desativar som');if(!muted)sound(600,.08)});
+loop();
+})();
+</script>
+</body>
+</html>
